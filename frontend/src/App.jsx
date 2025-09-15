@@ -1,33 +1,47 @@
-import { useState, useEffect } from 'react';
-import './App.css';
+import { useState, useEffect } from 'react'
 
 function App() {
-  
-  const [message, setMessage] = useState('');
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log("Attempting to fetch from http://localhost:8000/api/hello");
-    fetch('http://localhost:8000/api/hello')
-      .then(response => {
-        console.log("Received response:", response);
-        return response.json();
-      })
-      .then(data => {
-        console.log("Received data:", data);
-        setMessage(data.message);
-      })
-      .catch(error => {console.error('error:', error)});
-  }, []);
+    fetchPosts()
+  }, [])
 
-
-  return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <p>Backend says: <strong>{message || 'Loading...'}</strong></p>
-      </div>
-    </>
-  );
+  const fetchPosts = async () => {
+  try {
+    const response = await fetch('/api/posts')
+    const postsData = await response.json()
+    setPosts(postsData)
+    setLoading(false)
+  } catch (error) {
+    console.error('Error fetching posts :', error)
+    setLoading(false)
+  }
 }
 
-export default App;
+  if (loading) {
+    return <div className="loading">Loading posts...</div>
+  }
+
+  return (
+    <div className="app">
+      <h1>My Blog Posts</h1>
+      <div className="posts">
+        {posts.map(post => (
+          <div key={post.id} className="post-card">
+            <h2>{post.title}</h2>
+            <p>{post.content}</p>
+            <div className="tags">
+              {post.tags.map(tag => (
+                <span key={tag} className="tag">#{tag}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default App
