@@ -1,14 +1,14 @@
-function LoginPage() {
-    return (
-        <div className="login-page">
-            <h1>Login page</h1>
 
-            <form>
-                <input type="email" />
-                <input type="password" />
-            </form>
-        </div>
-    )
+
+export default function LoginPage() {
+  return (
+    <div className="login-page">
+      <h1>Login page</h1>
+      <form>
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  )
 }
-
-export default LoginPage

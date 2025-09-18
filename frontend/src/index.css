@@ -116,7 +116,7 @@ footer {
     gap: 2em 1em;
 }
 
-.genre-select-container {
+.tag-select-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -206,7 +206,7 @@ footer {
     transition: background-color 0.3s;
 }
 
-.genre-label {
+.tag-label {
     position: absolute;
     top: 0;
     left: 0;

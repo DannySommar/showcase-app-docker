@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function HomePage() {
+export default function HomePage() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -21,49 +21,34 @@ function HomePage() {
   }
 
   return (
-    <div className="app">
-      {/* Your existing header HTML - convert to JSX */}
-      <div className="top-banner">
-        <button className="menu-toggle" aria-label="Toggle menu">☰</button>
-        <nav className="header-menu" aria-label="Main menu">
-          <a href="/login">Login</a>
-          <a href="#">Cart</a>
-          <form role="search">
-            <input type="text" placeholder="Search..." id="search-input" />
-          </form>
-        </nav>
-      </div>
-
-      <header>
-        <div className="header-text">
-          <h1>post-maker app</h1>
-          <p className="subhead">Better than Twitter!</p>
-        </div>
-      </header>
-
+    <>
+      <h1>Home Page</h1>
       {loading ? (
         <div className="loading">Loading posts...</div>
       ) : (
-        <main className="posts">
-          {posts.map(post => (
-            <div key={post.id} className="post-card">
-              <h2>{post.title}</h2>
-              <p>{post.content}</p>
-              <div className="tags">
-                {post.tags.map(tag => (
-                  <span key={tag} className="tag">#{tag}</span>
-                ))}
+        <div className="posts-container">
+          <section className="tag-select-container">
+            <label htmlFor="tag-select">View by tag</label>
+            <select id="tag-select">
+              <option value="">Show All</option>
+            </select>
+          </section>
+
+          <div className="posts">
+            {posts.map(post => (
+              <div key={post.id} className="post-card">
+                <h2>{post.title}</h2>
+                <p>{post.content}</p>
+                <div className="tags">
+                  {post.tags.map(tag => (
+                    <span key={tag} className="tag">#{tag}</span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </main>
+            ))}
+          </div>
+        </div>
       )}
-      
-      <footer>
-        <p>Skibidi</p>
-      </footer>
-    </div>
+    </>
   )
 }
-
-export default HomePage
