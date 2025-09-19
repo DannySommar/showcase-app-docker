@@ -4,12 +4,25 @@ import { postsRouter } from './routes/posts.js'
 import { authRouter } from './routes/auth.js'
 import { createTables } from './database/createTables.js'
 import { seedTables } from './database/seedTables.js'
+import session from 'express-session'
 
 const PORT = 8000
 const app = express()
+const secret = process.env.SESSION_SECRET || 'skibidi-toilet'
 
 app.use(cors())
 app.use(express.json())
+
+app.use(session({
+  secret: secret,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax'
+  }
+}))
 
 async function initializeDatabase() {
   try {
