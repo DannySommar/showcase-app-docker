@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { postsRouter } from './routes/posts.js'
+import { authRouter } from './routes/auth.js'
 import { createTables } from './database/createTables.js'
 import { seedTables } from './database/seedTables.js'
 
@@ -32,6 +33,7 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api/posts', postsRouter)
+app.use('/api/auth', authRouter)
 
 initializeDatabase().then(() => {
 

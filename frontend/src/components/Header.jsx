@@ -3,21 +3,22 @@ import { Link } from 'react-router-dom'
 export default function Header() {
   return (
     <>
-      <div className="top-banner">
-        <nav className="header-menu" aria-label="Main menu">
-          <Link to="/login">Login</Link>
-          <a href="#">Cart</a>
-          <form role="search">
-            <input type="text" placeholder="Search..." id="search-input" />
-          </form>
+      <div className="bg-gray-800 px-4 py-2 flex justify-end">
+        <nav className="flex gap-6 items-center">
+          <Link to="/login" className="text-blue-400 hover:text-blue-300 transition-colors">
+            Log in
+          </Link>
+          <button className="text-gray-300 hover:text-white transition-colors">
+            Log out
+          </button>
         </nav>
       </div>
 
-      <header>
+      <header className="bg-gray-900 px-8 py-6 flex justify-center">
         <Link to="/">
-          <div className="header-text">
-            <h1>post-maker app</h1>
-            <p className="subhead">Better than Twitter!</p>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-white">post-maker</h1>
+            <p className="text-gray-400">Better than Twitter!</p>
           </div>
         </Link>
       </header>
