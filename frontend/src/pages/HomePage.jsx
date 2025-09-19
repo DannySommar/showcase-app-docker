@@ -2,15 +2,27 @@ import { useState, useEffect } from 'react'
 
 export default function HomePage() {
   const [posts, setPosts] = useState([])
+  const [tags, setTags] = useState([])
   const [loading, setLoading] = useState(true)
+  const [selectedTag, setSelectedTag] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
     fetchPosts()
+    fetchTags()
   }, [])
+
+  useEffect(() => {
+    fetchPosts()
+  }, [selectedTag, searchTerm])
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/posts')
+      const params = new URLSearchParams()
+      if (selectedTag) params.append('tag', selectedTag)
+      if (searchTerm) params.append('search', searchTerm)
+
+      const response = await fetch(`/api/posts?${params}`)
       const postsData = await response.json()
       setPosts(postsData)
       setLoading(false)
@@ -20,6 +32,29 @@ export default function HomePage() {
     }
   }
 
+  const fetchTags = async () => {
+    try {
+      const response = await fetch('/api/posts/tags')
+      const tagsData = await response.json()
+      setTags(tagsData)
+    } catch (error) {
+      console.error('Error fetching tags:', error)
+    }
+  }
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value)
+  }
+
+  const handleTagChange = (e) => {
+    setSelectedTag(e.target.value)
+  }
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault()
+    fetchPosts()
+  }
+
   return (
     <div className="px-4 py-6">
       <h1 className="text-3xl font-bold text-center mb-3">Home Page</h1>
@@ -27,21 +62,26 @@ export default function HomePage() {
       <div className="bg-gray-800 rounded-lg p-4 mb-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <span className="text-gray-300">Filter by:</span>
-          <select className="bg-gray-700 text-white px-3 py-2 rounded border border-gray-600">
+          <select className="bg-gray-700 text-white px-3 py-2 rounded border border-gray-600"
+            value={selectedTag} 
+            onChange={handleTagChange}
+          >
             <option value="">All tags</option>
-            <option value="tech">Tech</option>
-            <option value="music">Music</option>
-            <option value="news">News</option>
+            {tags.map(tag => (
+              <option key={tag} value={tag}>{tag}</option>
+            ))}
           </select>
         </div>
         
-        <div className="relative">
+        <form onSubmit={handleSearchSubmit} className="relative">
           <input 
             type="text" 
             placeholder="Search posts..." 
+            value={searchTerm}
+            onChange={handleSearchChange}
             className="bg-gray-700 text-white px-4 py-2 rounded-full border border-gray-600"
           />
-        </div>
+        </form>
       </div>
 
       {loading ? (
