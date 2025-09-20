@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -13,19 +13,21 @@ export default function LoginPage() {
 
     try {
       const formData = new FormData(e.target)
+      const name = formData.get('name').trim()
+      const email = formData.get('email').trim()
       const username = formData.get('username').trim()
       const password = formData.get('password').trim()
 
-      console.log({ username, password })
-      const res = await fetch('/api/auth/login', {
+      console.log({ name, email, username, password })
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         credentials: 'include',
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ name, email, username, password })
       })
 
       const data = await res.json()
-      console.log('data from login attempt: ', data)
+      console.log('data from register attempt: ', data)
 
       if (res.ok) {
         navigate('/')
@@ -41,9 +43,29 @@ export default function LoginPage() {
 
   return (
     <div className="px-4 py-6">
-      <h1 className="text-3xl font-bold text-center mb-6">Login</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">Create Account</h1>
       
       <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-gray-800 rounded-lg p-6">
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-gray-300 mb-2">Full Name</label>
+          <input className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600"
+            type="text"
+            name="name"
+            id="name"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
+          <input className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600"
+            type="email"
+            name="email"
+            id="email"
+            required
+          />
+        </div>
+        
         <div className="mb-4">
           <label htmlFor="username" className="block text-gray-300 mb-2">Username</label>
           <input className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600"
@@ -51,6 +73,8 @@ export default function LoginPage() {
             name="username"
             id="username"
             required
+            pattern="[\w\-]{1,20}"
+            title="username must be 1-20 characters, using letters, numbers, _ or -"
           />
         </div>
         
@@ -70,8 +94,12 @@ export default function LoginPage() {
           type="submit"
           disabled={loading}
         >
-          {loading ? 'Logging in' : 'Log In'}
+          {loading ? 'Creating account' : 'Sign Up'}
         </button>
+        
+        <p className="text-gray-400 mt-4 text-center">
+          Already have an account? <Link to="/login" className="text-blue-400">Log in here</Link>
+        </p>
       </form>
     </div>
   )

@@ -8,7 +8,14 @@ export async function getCurrentUser(req, res) {
         if (!req.session.userId) {
             return res.json({ isLoggedIn: false })
         }
-        const user = await client.query('SELECT name FROM users WHERE id = $1', [req.session.userId])
+        
+        const result = await client.query('SELECT id, name, username FROM users WHERE id = $1', [req.session.userId])
+        
+        if (result.rows.length === 0) {
+            return res.json({ isLoggedIn: false })
+        }
+
+        const user = result.rows[0]
 
         res.json({ isLoggedIn: true, name: user.name})
 

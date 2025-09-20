@@ -7,6 +7,8 @@ export async function registerUser(req, res) {
 
     let { name, email, username, password } = req.body
 
+    console.log('tried registering in with ', { name, email, username, password } )
+
     if (!name || !email || !username || !password) {
 
         return res.status(400).json({ error: 'All fields are required.' })
@@ -32,8 +34,9 @@ export async function registerUser(req, res) {
     try {
 
         const existing = await client.query('SELECT id FROM users WHERE email = $1 OR username = $2', [email, username])
+        console.log('user exists? - row count:', existing.rowCount)
 
-        if (existing) {
+        if (existing.rowCount > 0) {
             return res.status(400).json({ error: 'Email or username already in use.' })
         }
 
@@ -58,6 +61,7 @@ export async function registerUser(req, res) {
 export async function loginUser(req, res) {
 
     let { username, password } = req.body
+    console.log('tried loging in with ', { username, password } )
 
     if (!username || !password) {
         return res.status(400).json({ error: 'All fields are required' } )
@@ -68,12 +72,13 @@ export async function loginUser(req, res) {
 
     try {
 
-        const user = await client.query('SELECT * FROM users WHERE username = $1', [username])
-
-        if (!user) {
+        const result = await client.query('SELECT * FROM users WHERE username = $1', [username])
+        
+        if (result.rows.length === 0) {
             return res.status(401).json({ error: 'Invalid credentials'})
         }
 
+        const user = result.rows[0]
         const isValid = await bcrypt.compare(password, user.password)
 
         if (!isValid) {
