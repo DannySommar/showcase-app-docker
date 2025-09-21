@@ -33,7 +33,7 @@ export default function Header() {
   }
 
   return (
-    <> 
+    <>
       <div className="bg-gray-800 px-4 py-2 flex justify-end">
         <nav className="flex gap-6 items-center">
           <span className="text-gray-300">
@@ -41,9 +41,14 @@ export default function Header() {
           </span>
           
           {user ? (
-            <button onClick={handleLogout} className="text-gray-300 hover:text-white">
-              Log out
-            </button>
+            <div className="flex gap-4">
+              <Link to="/my-posts" className="text-blue-400 hover:text-blue-300">
+                My Posts
+              </Link>
+              <button onClick={handleLogout} className="text-gray-300 hover:text-white">
+                Log out
+              </button>
+            </div>
           ) : (
             <div className="flex gap-4">
               <Link to="/login" className="text-blue-400 hover:text-blue-300">

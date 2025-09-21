@@ -3,18 +3,21 @@ export const posts = [
       "id": 1,
       "title": "My First Post",
       "content": "This is the content of my very first post. I'm excited to start sharing my thoughts!",
-      "tags": ["blog", "learning"]
+      "tags": ["blog", "learning"],
+      "user_id": 1
     },
     {
       "id": 2,
       "title": "Learning Docker",
       "content": "Docker is amazing for containerizing applications. This post is about my journey learning it.",
-      "tags": ["tech", "docker", "learning"]
+      "tags": ["tech", "docker", "learning"],
+      "user_id": 2
     },
     {
       "id": 3,
       "title": "Music Recommendations",
       "content": "Here are some great vinyl records I've been listening to lately.",
-      "tags": ["music", "vinyl", "recommendations"]
+      "tags": ["music", "vinyl", "recommendations"],
+      "user_id": 3
     }
   ]

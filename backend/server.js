@@ -1,9 +1,13 @@
 import express from 'express'
 import cors from 'cors'
+
 import { postsRouter } from './routes/posts.js'
 import { authRouter } from './routes/auth.js'
+import { userPostsRouter } from './routes/userPosts.js'
+
 import { createTables } from './database/createTables.js'
 import { seedTables } from './database/seedTables.js'
+
 import session from 'express-session'
 
 const PORT = 8000
@@ -47,6 +51,7 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/posts', postsRouter)
 app.use('/api/auth', authRouter)
+app.use('/api/user/posts', userPostsRouter)
 
 initializeDatabase().then(() => {
 
